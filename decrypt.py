@@ -1,22 +1,20 @@
 from cryptography.fernet import Fernet
 
-# Encryption Key (you need to store this securely)
-key = b'yGidZu033m1WccdrS6gvqL5KTVRvFTPNuIq4TvOXoz4='
+# Your secret key for decryption. Keep this secure and consistent with the encryption key.
+encryption_key = b'qoW3PipWdH6pgbsERsnPbLptNh5LvUsVPlUpMG4CHsQ='
 
-cipher = Fernet(key)
-
-encrypted_file = 'keystrokes.txt'
+encrypted_file = 'encrypted_keystrokes.txt'
 decrypted_file = 'decrypted_keystrokes.txt'
 
-# Read encrypted data from the file
-with open(encrypted_file, 'rb') as f:
-    encrypted_data = f.read()
+# Initialize the Fernet cipher with the encryption key
+cipher = Fernet(encryption_key)
 
-# Decrypt the data
-decrypted_data = cipher.decrypt(encrypted_data)
+def decrypt_file(filename):
+    with open(filename, 'rb') as file:
+        encrypted_data = file.read()
+    decrypted_data = cipher.decrypt(encrypted_data)
+    with open(decrypted_file, 'wb') as file:
+        file.write(decrypted_data)
 
-# Write decrypted data to a new file
-with open(decrypted_file, 'wb') as f:
-    f.write(decrypted_data)
-
-print("Decryption successful. Decrypted log file saved as", decrypted_file)
+# Decrypt the encrypted file
+decrypt_file(encrypted_file)
